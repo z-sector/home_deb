@@ -1,0 +1,27 @@
+version: '3.7'
+volumes:
+  pgdata:
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    environment:
+    - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/debitrum
+    ports:
+      - 8000:8000
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: debitrum
+      POSTGRES_DB: debitrum
+      POSTGRES_PASS: debitrum
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
