@@ -4,5 +4,3 @@ db.sqlite3
 __pycache__/
 debitrum/settings/prod.py
 debitrum/debug.log
-docker/prod
-prod.yml
