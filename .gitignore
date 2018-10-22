@@ -2,5 +2,5 @@
 venv/
 db.sqlite3
 __pycache__/
-backend_app/settings/prod.py
-debitrum/debug.log
+backend_app/debug.log
+backend_app/settings/prod.by
