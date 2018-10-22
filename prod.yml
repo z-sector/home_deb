@@ -8,14 +8,14 @@ services:
       context: .
       dockerfile: docker/prod/web/Dockerfile
     environment:
-      - DJANGO_SETTINGS_MODULE=debitrum.settings.prod
+      - DJANGO_SETTINGS_MODULE=backend_app.settings.prod
       - PYTHONUNBUFFERED=1
     volumes:
       - .:/debitrum
       - static_files:/static_files
     ports:
       - 8000:8000
-    command: gunicorn -w 4 debitrum.wsgi -b 0.0.0.0:8000
+    command: gunicorn -w 4 backend_app.wsgi -b 0.0.0.0:8000
   postgres:
     image: postgres:10.3
     environment:

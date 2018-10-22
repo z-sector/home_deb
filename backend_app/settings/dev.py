@@ -7,3 +7,8 @@ SECRET_KEY = 'xit(-1e(53z+_mr=un&=!clrn-bps7+&2__41a4!1cefnc^zs@'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+STATICFILES_DIRS = [
+    os.path.join(os.path.dirname(BASE_DIR), "static"),
+]

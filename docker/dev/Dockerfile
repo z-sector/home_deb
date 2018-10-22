@@ -7,7 +7,7 @@ WORKDIR /debitrum
 
 RUN pip install -r requirements.txt
 
-COPY ./docker/web/entrypoint.sh /entrypoint.sh
+COPY ./docker/dev/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 

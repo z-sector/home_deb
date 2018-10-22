@@ -1,0 +1,37 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "signin.css" %}" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin">
+      <img class="mb-4" src="{% static "forkme_left_red_aa0000.png" %}" alt="WWWW" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <div class="mt-5 mb-3 text-muted">
+      <a href="/register"><span class="tag tag-pill tag-success">Register</span></a>
+      <a href="/contact"><span class="tag tag-pill tag-success">Forgot password</span></a>
+      </div>
+      <div mt-5 mb-3 text-muted>
+      <a href="/about"><span class="tag tag-primary">About</span></a>
+      <a href="/contact"><span class="tag tag-primary">Contact US</span></a>
+      <a href="/faq"><span class="tag tag-primary">FAQ</span></a>
+      </div>
+    </form>
+  </body>
+</html>
