@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if reg_errors %}
+<h1>User {{ username }} exists, try again</h1>
+<ul>
+    {% for key, value in reg_errors.items %}
+    <li>
+        {{ key }} - {{ value }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<h1>User {{ username }} created</h1>
+{% endif %}
+</br>
+</br>
+<a href="/"><span class="tag tag-primary">to Home Page</span></a>
+</body>
+</html>

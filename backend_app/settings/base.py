@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'basic',
     'register',
+    'forgot_pass',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -120,4 +122,9 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+
+# User substitution
+# https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#auth-custom-user
+
+AUTH_USER_MODEL = 'accounts.User'
 

@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: docker/prod/web/Dockerfile
     environment:
-      - DJANGO_SETTINGS_MODULE=backend_app.settings.prod
+      - DJANGO_SETTINGS_MODULE=backend_app.settings.product
       - PYTHONUNBUFFERED=1
     volumes:
       - .:/debitrum

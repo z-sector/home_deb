@@ -15,17 +15,18 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin">
+    <form class="form-signin" method="post">
+      {% csrf_token %}
       <img class="mb-4" src="{% static "forkme_left_red_aa0000.png" %}" alt="WWWW" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <input type="email" id="inputEmail" name="username" class="form-control" placeholder="Email address" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       <div class="mt-5 mb-3 text-muted">
       <a href="/register"><span class="tag tag-pill tag-success">Register</span></a>
-      <a href="/contact"><span class="tag tag-pill tag-success">Forgot password</span></a>
+      <a href="/change"><span class="tag tag-pill tag-success">Forgot password</span></a>
       </div>
       <div mt-5 mb-3 text-muted>
       <a href="/about"><span class="tag tag-primary">About</span></a>
