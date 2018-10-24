@@ -1,6 +1,7 @@
 version: '3.7'
 volumes:
   pgdata:
+  redisdata:
 services:
   web:
     build:
@@ -15,6 +16,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
+      - redis
   postgres:
     image: postgres:10
     environment:
@@ -25,3 +27,10 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  redis:
+    image: redis
+    volumes:
+      - redisdata:/data
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass redisadmin

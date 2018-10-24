@@ -33,12 +33,12 @@ class FaqView(View):
     template_name = 'faq.html'
 
     def get(self, request, *args, **kwargs):
-        r = redis.StrictRedis('redis', port=6379)
+        # r = redis.StrictRedis('redis', port=6379, password='redisadmin')
         # s = r.set("key1", "value1")
         # s = r.get("key1").decode('utf-8')
         # print(s)
-        s = r.keys('*')
-        print(s)
+        # s = r.keys('*')
+        # print(s)
 
         return render(request, self.template_name)
 
