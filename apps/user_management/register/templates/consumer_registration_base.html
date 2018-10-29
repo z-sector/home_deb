@@ -6,15 +6,12 @@
 </head>
 <body>
     <h1>Registration</h1>
-    <a href="../"><span class="tag tag-primary">Back</span></a>
-    <form class="form-signin" method="post" action="./registration/">
+    <a href="../.."><span class="tag tag-primary">Back</span></a>
+    <form class="form-signin" method="post" action="../activate/">
       {% csrf_token %}
       <h1 class="h3 mb-3 font-weight-normal">User information</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
       <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus autocomplete="off">
-      </br></br>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required autocomplete="off">
       </br></br>
       <label for="inputFirstName" class="sr-only">First Name</label>
       <input type="text" id="inputFirstName" name="first_name" class="form-control" autocomplete="off">
@@ -43,7 +40,11 @@
       <label for="inputDOB" class="sr-only">DOB</label>
       <input type="date" id="inputDOB" name="dob" class="form-control" autocomplete="off">
       </br></br>
-
+      {% for message in messages %}
+        {% if message.level == 20 %}
+            <h1>{{ message.message }}</h1>
+        {% endif %}
+      {% endfor %}
       <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form>
 </body>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if reg_errors %}
+<h1>User {{ username }} exists, try again</h1>
+<ul>
+    {% for key, value in reg_errors.items %}
+    <li>
+        {{ key }} - {{ value }}
+    </li>
+    {% endfor %}
+</ul>
+</br></br>
+{% else %}
+<form class="form-signin" method="post" action="../main/">
+    {% csrf_token %}
+{% if username %}
+    <label for="inputEmail" class="sr-only">{{ username }}, enter the activation code</label>
+{% else %}
+    <label for="inputEmail" class="sr-only">Enter the activation code</label>
+{% endif %}
+<input type="text" id="inputCode" name="code" class="form-control" required autofocus autocomplete="off">
+<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+{% for message in messages %}
+    {% if message.level == 20 %}
+        <h1>{{ message.message }}</h1>
+    {% endif %}
+{% endfor %}
+{% endif %}
+</br></br>
+<a href="/"><span class="tag tag-primary">to Home Page</span></a>
+</form>
+</body>
+</html>

@@ -9,8 +9,8 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('contact/', ContactView.as_view(), name='contact'),
     path('faq/', FaqView.as_view(), name='faq'),
-    path('register/', include('register.urls')),
-    path('change/', include('forgot_pass.urls')),
+    path('register/', include('apps.user_management.register.urls')),
+    path('change/', include('apps.user_management.forgot_pass.urls')),
     path('dashboard/', DashboardView.as_view(), name='login')
 
 ]

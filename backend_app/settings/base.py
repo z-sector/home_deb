@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'basic',
-    'register',
-    'forgot_pass',
-    'accounts',
+    'apps.user_management.register',
+    'apps.user_management.forgot_pass',
+    'apps.user_management.accounts',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +84,11 @@ DATABASES = {
     }
 }
 
+REDIS_PASSWORD = 'redisadmin'
+REDIS_HOST = 'redis'
+REDIS_PORT = 6379
+REDIS_EXPIRE = 120 # seconds
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -128,3 +133,6 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+SECRET_BYTE = 8
+
+JWS_ALGORITHM = 'HS256'

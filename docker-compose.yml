@@ -28,7 +28,7 @@ services:
     ports:
       - 5432:5432
   redis:
-    image: redis
+    image: redis:5
     volumes:
       - redisdata:/data
     ports:

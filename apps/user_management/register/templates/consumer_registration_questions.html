@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form class="form-signin" method="post" action="../terms/">
+    {% csrf_token %}
+    <label for="securutyQuestion1" class="sr-only">Security Question 1</label>
+    <input type="text" id="securutyQuestion1" name="question_1" list='listQuestion1' class="form-control"
+            autofocus autocomplete="off">
+    <datalist id="listQuestion1">
+        <option>Example 1</option>
+        <option>Example 2</option>
+        <option>Example 3</option>
+    </datalist>
+    <label for="idAnswer1" class="sr-only">Your answer</label>
+    <input type="text" id="idAnswer1" name="answer_1" class="form-control" autofocus autocomplete="off">
+    </br></br>
+    <label for="securutyQuestion2" class="sr-only">Security Question 2</label>
+    <input type="text" id="securutyQuestion2" name="question_2" list='listQuestion2' class="form-control"
+           autofocus autocomplete="off">
+    <datalist id="listQuestion2">
+        <option>Example 1</option>
+        <option>Example 2</option>
+        <option>Example 3</option>
+    </datalist>
+    <label for="idAnswer2" class="sr-only">Your answer</label>
+    <input type="text" id="idAnswer2" name="answer_2" class="form-control" autofocus autocomplete="off">
+    </br></br>
+    <label for="securutyQuestion1" class="sr-only">Security Question 3</label>
+    <input type="text" id="securutyQuestion3" name="question_3" list='listQuestion3' class="form-control"
+           autofocus autocomplete="off">
+    <datalist id="listQuestion3">
+        <option>Example 1</option>
+        <option>Example 2</option>
+        <option>Example 3</option>
+    </datalist>
+    <label for="idAnswer3" class="sr-only">Your answer</label>
+    <input type="text" id="idAnswer3" name="answer_3" class="form-control" autofocus autocomplete="off">
+    </br></br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+</form>
+</br></br>
+<a href="/"><span class="tag tag-primary">to Home Page</span></a>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form class="form-signin" method="post" action="../effect/">
+    {% csrf_token %}
+    <label for="term1" class="sr-only">Terms 1</label>
+    <input type="checkbox" id="term1" name="term_1" autofocus autocomplete="off">
+    </br></br>
+    <label for="term2" class="sr-only">Terms 2</label>
+    <input type="checkbox" id="term2" name="term_2" autofocus autocomplete="off">
+    </br></br>
+    <label for="term3" class="sr-only">Terms 3</label>
+    <input type="checkbox" id="term3" name="term_3" autofocus autocomplete="off">
+    </br></br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+</form>
+</br></br>
+<a href="/"><span class="tag tag-primary">to Home Page</span></a>
+</body>
+</html>

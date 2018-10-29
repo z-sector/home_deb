@@ -4,11 +4,12 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-TYPE_USER = (
+USER_TYPE = (
     (1, 'consumers'),
     (2, 'organizations'),
     (3, 'regulators')
 )
+
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
@@ -49,18 +50,27 @@ class User(AbstractUser):
 
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    address = models.CharField(max_length=254, blank=True)
-    type_user = models.IntegerField(choices=TYPE_USER, default=1)
-    city = models.CharField(max_length=128, blank=True)
-    state = models.CharField(max_length=128, blank=True)
-    zip = models.CharField(max_length=8, blank=True)
-    phone_1 = models.CharField(max_length=30, blank=True)
-    phone_2 = models.CharField(max_length=30, blank=True)
-    phone_3 = models.CharField(max_length=30, blank=True)
-    phone_4 = models.CharField(max_length=30, blank=True)
-    phone_5 = models.CharField(max_length=30, blank=True)
-    ssn = models.CharField(max_length=10, blank=True)
+    address = models.CharField(max_length=254, null=True, blank=True)
+    user_type = models.IntegerField(choices=USER_TYPE, default=1)
+    city = models.CharField(max_length=128, null=True, blank=True)
+    state = models.CharField(max_length=128, null=True, blank=True)
+    zip = models.CharField(max_length=8, null=True, blank=True)
+    phone_1 = models.CharField(max_length=30, null=True, blank=True)
+    phone_2 = models.CharField(max_length=30, null=True, blank=True)
+    phone_3 = models.CharField(max_length=30, null=True, blank=True)
+    phone_4 = models.CharField(max_length=30, null=True, blank=True)
+    phone_5 = models.CharField(max_length=30, null=True, blank=True)
+    ssn = models.CharField(max_length=10, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
+    question_1 = models.CharField(max_length=254, null=True, blank=True)
+    answer_1 = models.CharField(max_length=254, null=True, blank=True)
+    question_2 = models.CharField(max_length=254, null=True, blank=True)
+    answer_2 = models.CharField(max_length=254, null=True, blank=True)
+    question_3 = models.CharField(max_length=254, null=True, blank=True)
+    answer_3 = models.CharField(max_length=254, null=True, blank=True)
+    term_1 = models.BooleanField(default=False)
+    term_2 = models.BooleanField(default=False)
+    term_3 = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
