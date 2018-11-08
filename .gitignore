@@ -4,4 +4,7 @@ db.sqlite3
 __pycache__/
 backend_app/settings/product.py
 backend_app/debug.log
-accounts/migrations/
+apps/user_management/accounts/migrations/
+static/
+templates/
+help.txt

@@ -8,7 +8,7 @@ from apps.user_management.register.views import (
 )
 
 urlpatterns = [
-    path('', MainView.as_view(), name='register'),
+    path('', MainView.as_view(), name='registration'),
     path('consumer/base/', ConsumerRegistrationBaseView.as_view(), name='consumer_registration_base'),
     path('organization/', OrganizationsView.as_view(), name='organization'),
     path('regulator/', RegulatorsView.as_view(), name='regulator')

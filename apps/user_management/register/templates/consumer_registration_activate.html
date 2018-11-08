@@ -5,17 +5,6 @@
     <title>Title</title>
 </head>
 <body>
-{% if reg_errors %}
-<h1>User {{ username }} exists, try again</h1>
-<ul>
-    {% for key, value in reg_errors.items %}
-    <li>
-        {{ key }} - {{ value }}
-    </li>
-    {% endfor %}
-</ul>
-</br></br>
-{% else %}
 <form class="form-signin" method="post" action="../main/">
     {% csrf_token %}
 {% if username %}
@@ -30,8 +19,7 @@
         <h1>{{ message.message }}</h1>
     {% endif %}
 {% endfor %}
-{% endif %}
-</br></br>
+<br><br>
 <a href="/"><span class="tag tag-primary">to Home Page</span></a>
 </form>
 </body>

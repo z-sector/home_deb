@@ -1,0 +1,32 @@
+[
+  {
+    "model": "accounts.groupusertype",
+    "pk": 1,
+    "fields": {
+      "name": "superuser"
+    }
+  },
+  {
+    "model": "accounts.groupusertype",
+    "pk": 2,
+    "fields": {
+      "name": "consumer"
+    }
+  },
+  {
+    "model": "accounts.usertype",
+    "pk": 1,
+    "fields": {
+      "name": "superuser",
+      "group_user_type_id": 1
+    }
+  },
+  {
+    "model": "accounts.usertype",
+    "pk": 2,
+    "fields": {
+      "name": "consumer",
+      "group_user_type_id": 2
+    }
+  }
+]

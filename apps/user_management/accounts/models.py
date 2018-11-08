@@ -4,11 +4,16 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-USER_TYPE = (
-    (1, 'consumers'),
-    (2, 'organizations'),
-    (3, 'regulators')
-)
+import uuid
+
+from .base_models import user_type, profile, terms, group, permission
+
+
+# USER_TYPE = (
+#     (1, 'consumers'),
+#     (2, 'organizations'),
+#     (3, 'regulators')
+# )
 
 
 class UserManager(BaseUserManager):
@@ -45,34 +50,76 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
+class GroupUserType(user_type.GroupUserTypeBase):
+    pass
+
+
+class UserType(user_type.UserTypeBase):
+    group_user_type_id = models.ForeignKey(GroupUserType, on_delete=models.CASCADE)
+    pass
+
+
+class Group(group.GroupBase):
+    pass
+
+
 class User(AbstractUser):
     """User model."""
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = None
+    first_name = None
+    last_name = None
     email = models.EmailField(_('email address'), unique=True)
-    address = models.CharField(max_length=254, null=True, blank=True)
-    user_type = models.IntegerField(choices=USER_TYPE, default=1)
-    city = models.CharField(max_length=128, null=True, blank=True)
-    state = models.CharField(max_length=128, null=True, blank=True)
-    zip = models.CharField(max_length=8, null=True, blank=True)
-    phone_1 = models.CharField(max_length=30, null=True, blank=True)
-    phone_2 = models.CharField(max_length=30, null=True, blank=True)
-    phone_3 = models.CharField(max_length=30, null=True, blank=True)
-    phone_4 = models.CharField(max_length=30, null=True, blank=True)
-    phone_5 = models.CharField(max_length=30, null=True, blank=True)
-    ssn = models.CharField(max_length=10, null=True, blank=True)
-    dob = models.DateField(null=True, blank=True)
+    user_type = models.OneToOneField(UserType, on_delete=models.SET_NULL, blank=True, null=True)
+    group_id = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
     question_1 = models.CharField(max_length=254, null=True, blank=True)
     answer_1 = models.CharField(max_length=254, null=True, blank=True)
     question_2 = models.CharField(max_length=254, null=True, blank=True)
     answer_2 = models.CharField(max_length=254, null=True, blank=True)
     question_3 = models.CharField(max_length=254, null=True, blank=True)
     answer_3 = models.CharField(max_length=254, null=True, blank=True)
-    term_1 = models.BooleanField(default=False)
-    term_2 = models.BooleanField(default=False)
-    term_3 = models.BooleanField(default=False)
+    # term_1 = models.BooleanField(default=False)
+    # term_2 = models.BooleanField(default=False)
+    # term_3 = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    class Meta:
+        db_table = 'user'
+        verbose_name = 'user'
+
+
+class UserConsumer(profile.UserConsumerBase):
+    user_id = models.OneToOneField(UserType, on_delete=models.CASCADE, primary_key=True)
+
+
+class Terms(terms.TermsBase):
+    pass
+
+
+class UserTypeTerms(terms.UserTypeTermsBase):
+    user_type_id = models.ForeignKey(UserType, on_delete=models.CASCADE)
+    terms_id = models.ForeignKey(Terms, on_delete=models.CASCADE)
+
+
+class UserTerms(terms.UserTermsBase):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_type_terms_id = models.ForeignKey(UserTypeTerms, on_delete=models.CASCADE)
+
+
+class Permission(permission.PermissionBase):
+    pass
+
+
+class UserTypePermission(permission.UserTypePermissionBase):
+    user_type_id = models.ForeignKey(UserType, on_delete=models.CASCADE)
+    permission_id = models.ForeignKey(Permission, on_delete=models.CASCADE)
+
+
+class UserPermission(permission.UserPermissionBase):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_type_permission_id = models.ForeignKey(UserTypePermission, on_delete=models.CASCADE)

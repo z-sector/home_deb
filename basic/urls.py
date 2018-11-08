@@ -2,15 +2,16 @@
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import AboutView, ContactView, FaqView, DashboardView, login
+from basic.views import AboutView, ContactView, FaqView, MainView
 
 urlpatterns = [
-    path('', login, name='index'),
+    path('', MainView.as_view(), name='index'),
+    path('user/', include('apps.user_management.accounts.urls')),
     path('about/', AboutView.as_view(), name='about'),
-    path('contact/', ContactView.as_view(), name='contact'),
+    path('contacts/', ContactView.as_view(), name='contacts'),
     path('faq/', FaqView.as_view(), name='faq'),
-    path('register/', include('apps.user_management.register.urls')),
+    path('registration/', include('apps.user_management.register.urls')),
     path('change/', include('apps.user_management.forgot_pass.urls')),
-    path('dashboard/', DashboardView.as_view(), name='login')
+    path('dashboard/', include('apps.dashboard.urls'))
 
 ]

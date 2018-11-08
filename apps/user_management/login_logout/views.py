@@ -73,19 +73,3 @@ class LogoutView(View):
         redis_db.delete(f'session:{cookie}')
 
         return response_redirect
-
-
-class DeleteAcountView(View):
-    template_name = 'delete_account.html'
-
-    def post(self, request):
-        cookie = request.COOKIES.get('session')
-        if cookie is None:
-            return render(request, template_name='dashboard_consumer.html')
-        redis_db = redis.StrictRedis(settings.REDIS_HOST, port=settings.REDIS_PORT, password=settings.REDIS_PASSWORD)
-        data = redis_db.get(f'session:{cookie}')
-        if data is None:
-            return render(request, template_name='dashboard_consumer.html')
-        data = jwt.decode(data, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM)
-        User.objects.filter(email=data.get('email')).delete()
-        return render(request, self.template_name)

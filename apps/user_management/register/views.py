@@ -53,15 +53,16 @@ class ErrorMessage:
 
         return user_id
 
+
 class MainView(View):
-    template_name = 'register.html'
+    template_name = 'registration_type.html'
 
     def get(self, request):
         return render(request, self.template_name)
 
 
 class ConsumerRegistrationBaseView(View):
-    template_name = 'consumer_registration_base.html'
+    template_name = 'registration_consumer.html'
 
     def get(self, request):
         return render(request, self.template_name)
@@ -82,13 +83,21 @@ class RegulatorsView(View):
 
 
 class ConsumerRegistrationActivateView(View, ErrorMessage):
-    template_name = 'consumer_registration_activate.html'
+    template_name = 'registration_activate.html'
 
     def post(self, request):
         data = {key: ''.join(value) for key, value in request.POST.items()}
         data.pop('csrfmiddlewaretoken')
 
-        error = self.email_validate(data)
+        # r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        #
+        # import re
+        #
+        # if not re.match(r"... regex here ...", email):
+        # ^(?=.*[0-9])(?=.*[!@# $%^&*()\-_+={}[\]\'\",.?<>/\\|])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\-_+={}[\]\'\",.?<>/\\|]{8,}$
+
+
+        error = self.email_validate({'email': data.get('email')})
         if error:
             messages.add_message(request, messages.INFO, error)
             return redirect('../base/')
@@ -120,7 +129,8 @@ class ConsumerRegistrationMainView(View, ErrorMessage):
         user_id_key = redis_db.hkeys(f'user:{user_id}')
 
         if not user_id_key:
-            messages.add_message(request, messages.INFO, 'Invalid activation code entered, try again')
+            messages.add_message(request, messages.INFO,
+                                 'Invalid activation code entered, try again. Or Registration time out')
             return redirect('../activate/')
 
         payload = {
@@ -243,6 +253,7 @@ class ConsumerRegistrationEffectView(View, ErrorMessage):
 
         data_db = redis_db.hgetall(f'user:{user_id}')
         data_db = {key.decode('utf-8'): value.decode('utf-8') for key, value in data_db.items()}
+        redis_db.delete(f'user:{user_id}')
 
         data_db['password'] = jwt.decode(data_db['password'], settings.SECRET_KEY,
                                          algorithm=settings.JWS_ALGORITHM)['passw']
@@ -262,5 +273,8 @@ class ConsumerRegistrationEffectView(View, ErrorMessage):
         user.set_password(password)
 
         user.save()
+
+        response = render(request, self.template_name)
+        response.delete_cookie('activate')
 
         return render(request, self.template_name)

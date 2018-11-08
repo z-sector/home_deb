@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.abspath(__file__)
+BASE_DIR = os.path.dirname(BASE_DIR)
+BASE_DIR = os.path.dirname(BASE_DIR)
+BASE_DIR = os.path.dirname(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -36,6 +39,9 @@ INSTALLED_APPS = [
     'apps.user_management.register',
     'apps.user_management.forgot_pass',
     'apps.user_management.accounts',
+    'apps.user_management.login_logout',
+    'apps.user_management.delete_account',
+    'apps.dashboard'
 ]
 
 MIDDLEWARE = [
@@ -66,6 +72,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'backend_app.wsgi.application'
 
@@ -134,5 +141,9 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'accounts.User'
 
 SECRET_BYTE = 8
+
+SESSION_BYTE = 32
+
+SESSION_EXPIRE = 120
 
 JWS_ALGORITHM = 'HS256'

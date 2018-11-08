@@ -13,8 +13,9 @@ ALLOWED_HOSTS = [
 
 
 STATICFILES_DIRS = [
-    os.path.join(os.path.dirname(BASE_DIR), "static"),
+    os.path.join(BASE_DIR, "static"),
 ]
+
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
