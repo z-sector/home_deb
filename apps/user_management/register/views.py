@@ -12,6 +12,7 @@ import redis
 from threading import Thread
 
 from apps.user_management.accounts.models import User
+from apps.user_management.utils import send_by_email_message, create_token_activate
 
 
 # Create your views here.
@@ -89,14 +90,6 @@ class ConsumerRegistrationActivateView(View, ErrorMessage):
         data = {key: ''.join(value) for key, value in request.POST.items()}
         data.pop('csrfmiddlewaretoken')
 
-        # r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-        #
-        # import re
-        #
-        # if not re.match(r"... regex here ...", email):
-        # ^(?=.*[0-9])(?=.*[!@# $%^&*()\-_+={}[\]\'\",.?<>/\\|])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\-_+={}[\]\'\",.?<>/\\|]{8,}$
-
-
         error = self.email_validate({'email': data.get('email')})
         if error:
             messages.add_message(request, messages.INFO, error)
@@ -108,11 +101,13 @@ class ConsumerRegistrationActivateView(View, ErrorMessage):
         all([redis_db.hset(f'user:{user_id}', key, value) for key, value in data.items()])
         redis_db.expire(f'user:{user_id}', settings.REDIS_EXPIRE)
 
-        message = f'Activation code:\n{user_id}'
-        thread = Thread(target=send_mail,
-                        args=('Hello', message, '', [data['email']]))
-        thread.daemon = True
-        thread.start()
+        user_id, token = create_token_activate(email=username, user_type=str(user.user_type))
+        send_by_email_message(message=f'{user_id}', recipient=data.get('email'))
+        # message = f'Activation code:\n{user_id}'
+        # thread = Thread(target=send_mail,
+        #                 args=('Hello', message, '', [data.get('email')]))
+        # thread.daemon = True
+        # thread.start()
 
         return render(request, self.template_name, {'username': data.get('email')})
 
@@ -140,7 +135,7 @@ class ConsumerRegistrationMainView(View, ErrorMessage):
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM).decode('utf-8')
         response = render(request, self.template_name)
         response.set_cookie(
-            'activate',
+            'reg_cons',
             token,
             expires=(datetime.now() + timedelta(seconds=settings.REDIS_EXPIRE)),
             path='/register/consumer/'
@@ -275,6 +270,6 @@ class ConsumerRegistrationEffectView(View, ErrorMessage):
         user.save()
 
         response = render(request, self.template_name)
-        response.delete_cookie('activate')
+        response.delete_cookie('reg_cons')
 
         return render(request, self.template_name)

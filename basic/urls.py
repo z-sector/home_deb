@@ -11,7 +11,7 @@ urlpatterns = [
     path('contacts/', ContactView.as_view(), name='contacts'),
     path('faq/', FaqView.as_view(), name='faq'),
     path('registration/', include('apps.user_management.register.urls')),
-    path('change/', include('apps.user_management.forgot_pass.urls')),
+    path('recovery/', include('apps.user_management.forgot_pass.urls')),
     path('dashboard/', include('apps.dashboard.urls'))
 
 ]

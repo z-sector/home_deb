@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import re
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.abspath(__file__)
@@ -18,13 +19,11 @@ BASE_DIR = os.path.dirname(BASE_DIR)
 BASE_DIR = os.path.dirname(BASE_DIR)
 BASE_DIR = os.path.dirname(BASE_DIR)
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -73,9 +72,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'backend_app.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -94,7 +91,7 @@ DATABASES = {
 REDIS_PASSWORD = 'redisadmin'
 REDIS_HOST = 'redis'
 REDIS_PORT = 6379
-REDIS_EXPIRE = 120 # seconds
+REDIS_EXPIRE = 120  # seconds
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -114,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -127,7 +123,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -144,6 +139,13 @@ SECRET_BYTE = 8
 
 SESSION_BYTE = 32
 
-SESSION_EXPIRE = 120
+SESSION_EXPIRE = 86400
+
 
 JWS_ALGORITHM = 'HS256'
+
+REG_PASSWORD = re.compile(r"^(?=.*?[a-z].*?[a-z])(?=.*?[A-Z].*?[A-Z])(?=.*?[0-9].*?[0-9])(?=.*[^\w\s]).{12,}")
+
+REG_EMAIL = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
+
+REG_PHONE = re.compile(r"^\d{9,}$")

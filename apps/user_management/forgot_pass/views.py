@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 
 
 class RecoverView(View):
-    template_name = 'change.html'
+    template_name = 'recovery_email.html'
 
     def get(self, request):
         return render(request, self.template_name)

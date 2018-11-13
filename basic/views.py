@@ -18,18 +18,12 @@ class MainView(View):
     def get(self, request):
         cookie = request.COOKIES.get('session')
         if cookie:
-            redis_db = redis.StrictRedis(settings.REDIS_HOST, port=settings.REDIS_PORT,
+            redis_db = redis.Redis(settings.REDIS_HOST, port=settings.REDIS_PORT,
                                          password=settings.REDIS_PASSWORD)
             data = redis_db.get(f'session:{cookie}')
+            print(data)
             if data:
-                data = jwt.decode(data, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM)
-                if data.get('user_type') == '1':
-                    response = render(
-                        request,
-                        template_name='dashboard_consumer.html',
-                        context={'username': data.get('email')}
-                    )
-                    return response
+                return redirect('login_dashboard')
         return render(request, self.template_name)
 
 
@@ -41,7 +35,7 @@ class AboutView(View):
 
 
 class ContactView(View):
-    template_name = 'contact.html'
+    template_name = 'contacts.html'
 
     def get(self, request):
         return render(request, self.template_name)

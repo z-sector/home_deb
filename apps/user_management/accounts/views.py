@@ -21,41 +21,49 @@ import redis
 from threading import Thread
 
 from apps.user_management.accounts.models import User
+from apps.user_management.utils import send_by_email_message, create_token_activate
 
 
 # Create your views here.
 
 class LoginActiveView(View):
-    template_name = 'login_active.html'
+    template_name = 'login_token.html'
 
     def post(self, request):
-        username = request.POST.get('username')
+        username = request.POST.get('email')
         password = request.POST.get('password')
         user = auth.authenticate(username=username, password=password)
         if user:
-            user_id = secrets.token_urlsafe(settings.SECRET_BYTE)
-            redis_db = redis.StrictRedis(settings.REDIS_HOST, port=settings.REDIS_PORT,
-                                         password=settings.REDIS_PASSWORD)
+            # user_id = secrets.token_urlsafe(settings.SECRET_BYTE)
+            # redis_db = redis.StrictRedis(settings.REDIS_HOST, port=settings.REDIS_PORT,
+            #                              password=settings.REDIS_PASSWORD)
+            #
+            # payload = {
+            #     'email': username,
+            #     'user_type': user_type
+            # }
+            # token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM).decode('utf-8')
+            # redis_db.set(f'user:{user_id}', token)
+            # redis_db.expire(f'user:{user_id}', settings.REDIS_EXPIRE)
+            user_id, token = create_token_activate(email=username, user_type=str(user.user_type))
+            send_by_email_message(message=f'{user_id}', recipient=username)
+            # message = f'Activation code:\n{user_id}'
+            # thread = Thread(target=send_mail,
+            #                 args=('Hello', message, '', [username]))
+            # thread.daemon = True
+            # thread.start()
+            response = render(request, self.template_name)
+            response.set_cookie(
+                'activate',
+                token,
+                expires=(datetime.now() + timedelta(seconds=settings.REDIS_EXPIRE)),
+                path='/'
+            )
+            return response
+        return render(request, template_name="index.html", context={'error': 'Incorrect email or password'})
 
-            user_type = str(user.user_type)
-
-            payload = {
-                'email': username,
-                'user_type': user_type
-            }
-            token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM).decode('utf-8')
-            redis_db.set(f'user:{user_id}', token)
-            redis_db.expire(f'user:{user_id}', settings.REDIS_EXPIRE)
-            message = f'Activation code:\n{user_id}'
-            thread = Thread(target=send_mail,
-                            args=('Hello', message, '', [username]))
-            thread.daemon = True
-            thread.start()
-            return render(request, self.template_name, {'username': username})
-        return render(request, template_name="index.html", context={'error': True})
-
-    def get(self, request):
-        return render(request, self.template_name)
+    # def get(self, request):
+    #     return render(request, self.template_name)
 
 
 class LogoutView(View):
@@ -68,7 +76,7 @@ class LogoutView(View):
         response_redirect = redirect('/')
         response_redirect.delete_cookie('cookie')
 
-        redis_db = redis.StrictRedis(settings.REDIS_HOST, port=settings.REDIS_PORT,
+        redis_db = redis.Redis(settings.REDIS_HOST, port=settings.REDIS_PORT,
                                      password=settings.REDIS_PASSWORD)
         redis_db.delete(f'session:{cookie}')
 

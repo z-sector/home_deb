@@ -18,6 +18,12 @@ class UserConsumerBase(models.Model):
     phone_1 = models.CharField(max_length=30, null=True, blank=True)
     phone_2 = models.CharField(max_length=30, null=True, blank=True)
     phone_3 = models.CharField(max_length=30, null=True, blank=True)
+    question_1 = models.CharField(max_length=254, null=True, blank=True)
+    answer_1 = models.CharField(max_length=254, null=True, blank=True)
+    question_2 = models.CharField(max_length=254, null=True, blank=True)
+    answer_2 = models.CharField(max_length=254, null=True, blank=True)
+    question_3 = models.CharField(max_length=254, null=True, blank=True)
+    answer_3 = models.CharField(max_length=254, null=True, blank=True)
 
     class Meta:
         abstract = True
