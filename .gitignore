@@ -5,6 +5,8 @@ __pycache__/
 backend_app/settings/product.py
 backend_app/debug.log
 apps/user_management/accounts/migrations/
+apps/user_management/terms/migrations/
+apps/user_management/permissions/migrations/
 static/
 templates/
 help.txt

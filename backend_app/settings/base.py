@@ -38,14 +38,15 @@ INSTALLED_APPS = [
     'apps.user_management.register',
     'apps.user_management.forgot_pass',
     'apps.user_management.accounts',
-    'apps.user_management.login_logout',
+    'apps.user_management.terms',
+    'apps.user_management.permissions',
     'apps.user_management.delete_account',
     'apps.dashboard'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -92,6 +93,16 @@ REDIS_PASSWORD = 'redisadmin'
 REDIS_HOST = 'redis'
 REDIS_PORT = 6379
 REDIS_EXPIRE = 120  # seconds
+
+
+MIGRATION_MODULES = {
+    'sessions': None,
+    # 'auth':None,
+    'accounts': 'apps.user_management.accounts.migrations',
+    'terms': 'apps.user_management.terms.migrations',
+    'permissions': 'apps.user_management.permissions.migrations',
+
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

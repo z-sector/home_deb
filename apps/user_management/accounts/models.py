@@ -7,8 +7,6 @@ from django.conf import settings
 
 import uuid
 
-from .base_models import user_type, profile, terms, group, permission
-
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
@@ -30,6 +28,7 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+
         return user
 
     def create_user(self, email, password=None, **extra_fields):
@@ -52,28 +51,49 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class GroupUserType(user_type.GroupUserTypeBase):
-    pass
+class GroupUserType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        db_table = 'group_user_type'
+        verbose_name = 'Group_user_type'
+        verbose_name_plural = 'Group_user_type'
 
 
-class UserType(user_type.UserTypeBase):
+class UserType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
     group_user_type = models.ForeignKey(GroupUserType, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.group_user_type.name}.{self.name}"
 
+    class Meta:
+        db_table = 'user_type'
+        verbose_name = 'User_type'
+        verbose_name_plural = 'User_type'
 
-class Group(group.GroupBase):
-    pass
+
+class Group(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        db_table = 'group'
+        verbose_name = 'Group'
+        verbose_name_plural = 'Group'
 
 
 class User(AbstractUser):
     """User model."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = None
-    first_name = None
-    last_name = None
+    # username = None
+    # first_name = None
+    # last_name = None
+    # groups = None
+    # user_permissions = None
     email = models.EmailField(_('email address'), unique=True)
     user_type = models.OneToOneField(UserType, on_delete=models.SET_NULL, blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
@@ -100,34 +120,31 @@ class User(AbstractUser):
         verbose_name = 'user'
 
 
-class UserConsumer(profile.UserConsumerBase):
+class UserConsumer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # group = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
+    salutation = models.CharField(max_length=30, null=True, blank=True)
+    first_name = models.CharField(max_length=30, null=True, blank=True)
+    middle_name = models.CharField(max_length=30, null=True, blank=True)
+    last_nam = models.CharField(max_length=30, null=True, blank=True)
+    suffix = models.CharField(max_length=30, null=True, blank=True)
+    ssn = models.CharField(max_length=30, null=True, blank=True)
+    address = models.CharField(max_length=254, null=True, blank=True)
+    dob = models.DateField(null=True, blank=True)
+    city = models.CharField(max_length=30, null=True, blank=True)
+    state = models.CharField(max_length=30, null=True, blank=True)
+    zip = models.CharField(max_length=30, null=True, blank=True)
+    phone_1 = models.CharField(max_length=30, null=True, blank=True)
+    phone_2 = models.CharField(max_length=30, null=True, blank=True)
+    phone_3 = models.CharField(max_length=30, null=True, blank=True)
+    question_1 = models.CharField(max_length=254, null=True, blank=True)
+    answer_1 = models.CharField(max_length=254, null=True, blank=True)
+    question_2 = models.CharField(max_length=254, null=True, blank=True)
+    answer_2 = models.CharField(max_length=254, null=True, blank=True)
+    question_3 = models.CharField(max_length=254, null=True, blank=True)
+    answer_3 = models.CharField(max_length=254, null=True, blank=True)
 
-
-class Terms(terms.TermsBase):
-    pass
-
-
-class UserTypeTerms(terms.UserTypeTermsBase):
-    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)
-    terms = models.ForeignKey(Terms, on_delete=models.CASCADE)
-
-
-class UserTerms(terms.UserTermsBase):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_type_terms = models.ForeignKey(UserTypeTerms, on_delete=models.CASCADE)
-
-
-class Permission(permission.PermissionBase):
-    pass
-
-
-class UserTypePermission(permission.UserTypePermissionBase):
-    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)
-    permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
-
-
-class UserPermission(permission.UserPermissionBase):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_type_permission = models.ForeignKey(UserTypePermission, on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'user_consumer'
+        verbose_name = 'User_consumer'
+        verbose_name_plural = 'User_consumer'
