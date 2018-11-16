@@ -21,7 +21,6 @@ class MainView(View):
             redis_db = redis.Redis(settings.REDIS_HOST, port=settings.REDIS_PORT,
                                          password=settings.REDIS_PASSWORD)
             data = redis_db.get(f'session:{cookie}')
-            print(data)
             if data:
                 return redirect('login_dashboard')
         return render(request, self.template_name)

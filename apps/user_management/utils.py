@@ -17,20 +17,20 @@ def send_by_email_message(message, recipient):
 
 
 def create_token_activate(**kwargs):
-    user_id = secrets.token_urlsafe(settings.SECRET_BYTE)
+    user_code = secrets.token_urlsafe(settings.SECRET_BYTE)
+    kwargs.update(user_code=user_code)
     redis_db = redis.Redis(settings.REDIS_HOST, port=settings.REDIS_PORT,
-                                 password=settings.REDIS_PASSWORD)
-
+                           password=settings.REDIS_PASSWORD)
     token = jwt.encode(kwargs, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM).decode('utf-8')
+    user_id = secrets.token_urlsafe(settings.SESSION_BYTE)
     redis_db.set(f'user:{user_id}', token)
     redis_db.expire(f'user:{user_id}', settings.REDIS_EXPIRE)
-    return user_id, token
+    return user_id, user_code
 
 
 def create_token_session(**kwargs):
-    print(kwargs)
     redis_db = redis.Redis(settings.REDIS_HOST, port=settings.REDIS_PORT,
-                                 password=settings.REDIS_PASSWORD)
+                           password=settings.REDIS_PASSWORD)
     session_id = secrets.token_urlsafe(settings.SESSION_BYTE)
     token = jwt.encode(kwargs, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM).decode('utf-8')
     redis_db.set(f'session:{session_id}', token)

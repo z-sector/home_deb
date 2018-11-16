@@ -96,7 +96,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=128, unique=True)
     email = models.EmailField(_('email address'))
     is_active = models.BooleanField(_('active'), default=True)
-    user_type = models.OneToOneField(UserType, on_delete=models.SET_NULL, blank=True, null=True)
+    user_type = models.ForeignKey(UserType, on_delete=models.SET_NULL, blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
     question_1 = models.CharField(max_length=254, null=True, blank=True)
     answer_1 = models.CharField(max_length=254, null=True, blank=True)

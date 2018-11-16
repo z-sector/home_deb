@@ -59,11 +59,3 @@ class Command(BaseCommand):
 
         User.objects.create_superuser(username, email, password_1)
 
-        print(username)
-
-
-
-        # email = input('email')
-        # print(email)
-        # password_1 = getpass.getpass()
-        # password_2 = getpass.getpass('Password (again): ')

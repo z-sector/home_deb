@@ -15,6 +15,7 @@ from threading import Thread
 
 from apps.user_management.accounts.models import User
 from apps.user_management.utils import create_token_session
+from apps.user_management.backends import login
 
 
 class LoginDashboardtView(View):
@@ -24,31 +25,22 @@ class LoginDashboardtView(View):
         if not cookie:
             return render(request, 'index.html', context={'error': 'Registration time out'})
 
-        user_id = request.POST.get('verification_code')
+        verification_code = request.POST.get('verification_code')
         redis_db = redis.Redis(settings.REDIS_HOST, port=settings.REDIS_PORT, password=settings.REDIS_PASSWORD)
-        token = redis_db.get(f'user:{user_id}')
 
+        token = redis_db.get(f'user:{cookie}')
         if not token:
-            return render(request, 'login_token.html', context={'error': 'Invalid activation code entered, try again!'})
+            return render(request, 'index.html', context={'error': 'Registration time out'})
 
         data = jwt.decode(token, settings.SECRET_KEY, algorithm=settings.JWS_ALGORITHM)
+        user_code = data.get('user_code')
 
-        user = User.objects.get(email=data.get('email'))
-        user.last_login = timezone.now()
-        user.save()
+        if verification_code != user_code:
+            return render(request, 'login_token.html', context={'error': 'Invalid activation code entered, try again!'})
 
-        # for field_name in user._meta.local_fields:
-        #     print(field_name.name)
-        #     value = getattr(user, field_name.name, None)
-        #     print(value.__str__())
+        data = login(data.get('username'))
 
-        data = {key: value for key, value in user}
         session_id = create_token_session(**data)
-
-
-        # session_id = secrets.token_urlsafe(settings.SESSION_BYTE)
-        # redis_db.set(f'session:{session_id}', token)
-        # redis_db.expire(f'session:{session_id}', settings.SESSION_EXPIRE)
 
         response = render(
             request,

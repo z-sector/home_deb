@@ -43,13 +43,5 @@
       "name": "consumer",
       "group_user_type_id": 3
     }
-  },
-  {
-    "model": "accounts.usertype",
-    "pk": 5,
-    "fields": {
-      "name": "servicer",
-      "group_user_type_id": 3
-    }
   }
 ]
